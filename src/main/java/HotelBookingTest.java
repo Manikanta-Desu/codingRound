@@ -1,53 +1,46 @@
-import com.sun.javafx.PlatformUtil;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class HotelBookingTest {
+import utilities.BrowserHelper;
+import utilities.ClearTripHomePage;
+import utilities.HotelBookingPage;
 
-    WebDriver driver = new ChromeDriver();
+public class HotelBookingTest extends BrowserHelper {
 
-    @FindBy(linkText = "Hotels")
-    private WebElement hotelLink;
+	WebDriver driver;
+	
+	HotelBookingPage hotelBookingPage ;
+	
+	ClearTripHomePage clearTripHomepage;
 
-    @FindBy(id = "Tags")
-    private WebElement localityTextBox;
+	
+	@BeforeClass
+	public void BrowserLaunch(){
+		setDriverPath();
+		driver = new FirefoxDriver();
+		driver.manage().window().maximize();
+		driver.get("https://www.cleartrip.com/");
+		
+		clearTripHomepage = new ClearTripHomePage(driver);
+	}
+	
+	
+	@Test
+	public void shouldBeAbleToSearchForHotels() {
+		
+		hotelBookingPage=clearTripHomepage.clickHotelsLink();
 
-    @FindBy(id = "SearchHotelsButton")
-    private WebElement searchButton;
+		hotelBookingPage.setLocalityText("Indiranagar, Bangalore");
+		
+		hotelBookingPage.setTravellersOnHome("1 room, 2 adults");
+		
+//		new Select(travellerSelection).selectByVisibleText("1 room, 2 adults");
+		hotelBookingPage.setSearchButton();
 
-    @FindBy(id = "travellersOnhome")
-    private WebElement travellerSelection;
+		driver.quit();
 
-    @Test
-    public void shouldBeAbleToSearchForHotels() {
-        setDriverPath();
-
-        driver.get("https://www.cleartrip.com/");
-        hotelLink.click();
-
-        localityTextBox.sendKeys("Indiranagar, Bangalore");
-
-        new Select(travellerSelection).selectByVisibleText("1 room, 2 adults");
-        searchButton.click();
-
-        driver.quit();
-
-    }
-
-    private void setDriverPath() {
-        if (PlatformUtil.isMac()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver");
-        }
-        if (PlatformUtil.isWindows()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-        }
-        if (PlatformUtil.isLinux()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
-        }
-    }
+	}
 
 }
