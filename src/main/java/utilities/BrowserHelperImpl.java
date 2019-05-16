@@ -53,5 +53,13 @@ public class BrowserHelperImpl extends BrowserHelper{
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		
 	}
+	
+	public void waitFor(int durationInMilliSeconds) {
+        try {
+            Thread.sleep(durationInMilliSeconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
 
 }

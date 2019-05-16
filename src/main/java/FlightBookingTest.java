@@ -8,90 +8,82 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.sun.javafx.PlatformUtil;
 
-public class FlightBookingTest {
+import utilities.BrowserHelperImpl;
+import utilities.ClearTripHomePage;
 
-    WebDriver driver = new FirefoxDriver();
+public class FlightBookingTest extends BrowserHelperImpl {
 
+	@BeforeClass
+	public void BrowserLaunch() {
 
-    @Test
-    public void testThatResultsAppearForAOneWayJourney() {
+		// calling launch browser method from abstract class
+		launchBrowser("firefox", "http://www.cleartrip.com");
 
-        setDriverPath();
-        driver.manage().window().maximize();
-        driver.get("https://www.cleartrip.com/");
-        waitFor(2000);
-        driver.findElement(By.id("OneWay")).click();
+	}
 
-        driver.findElement(By.id("FromTag")).clear();
-        driver.findElement(By.id("FromTag")).sendKeys("Bangalore");
+	@Test
+	public void testThatResultsAppearForAOneWayJourney() {
 
-        //wait for the auto complete options to appear for the origin
+		driver.findElement(By.id("OneWay")).click();
 
-        WebDriverWait wait = new WebDriverWait(driver, 50);
-//        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.id("ui-id-1")));
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("ui-id-1")));
-        
-        List<WebElement> originOptions = driver.findElement(By.id("ui-id-1")).findElements(By.tagName("li"));
-        originOptions.get(0).click();
-        
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.name("destination")));
+		driver.findElement(By.id("FromTag")).clear();
+		driver.findElement(By.id("FromTag")).sendKeys("Bangalore");
 
-        driver.findElement(By.name("destination")).clear();
-        driver.findElement(By.name("destination")).sendKeys("Delhi");
+		// wait for the auto complete options to appear for the origin
 
-        //wait for the auto complete options to appear for the destination
+		WebDriverWait wait = new WebDriverWait(driver, 55);
+		// wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.id("ui-id-1")));
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("ui-id-1")));
 
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.id("ui-id-2")));
-        //select the first item from the destination auto complete list
-        List<WebElement> destinationOptions = driver.findElement(By.id("ui-id-2")).findElements(By.tagName("li"));
-        destinationOptions.get(0).click();
+		List<WebElement> originOptions = driver.findElement(By.id("ui-id-1")).findElements(By.tagName("li"));
+		originOptions.get(0).click();
 
-        driver.findElement(By.xpath("//*[@id='ui-datepicker-div']/div[1]/table/tbody/tr[3]/td[7]/a")).click();
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.name("destination")));
 
-        //all fields filled in. Now click on search
-        driver.findElement(By.id("SearchBtn")).click();
+		driver.findElement(By.name("destination")).clear();
+		driver.findElement(By.name("destination")).sendKeys("Delhi");
 
-        waitFor(5000);
-        //verify that result appears for the provided journey search
-        Assert.assertTrue(isElementPresent(By.className("searchSummary")));
+		// wait for the auto complete options to appear for the destination
 
-        //close the browser
-        driver.quit();
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.id("ui-id-2")));
+		// select the first item from the destination auto complete list
+		List<WebElement> destinationOptions = driver.findElement(By.id("ui-id-2")).findElements(By.tagName("li"));
+		destinationOptions.get(0).click();
 
-    }
+		driver.findElement(By.xpath("//*[@id='ui-datepicker-div']/div[1]/table/tbody/tr[3]/td[7]/a")).click();
 
+		// all fields filled in. Now click on search
+		driver.findElement(By.id("SearchBtn")).click();
 
-    private void waitFor(int durationInMilliSeconds) {
-        try {
-            Thread.sleep(durationInMilliSeconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-    }
+		waitFor(5000);
+		// verify that result appears for the provided journey search
+		Assert.assertTrue(isElementPresent(By.className("searchSummary")));
+
+		// close the browser
+		driver.quit();
+
+	}
 
 
-    private boolean isElementPresent(By by) {
-        try {
-            driver.findElement(by);
-            return true;
-        } catch (NoSuchElementException e) {
-            return false;
-        }
-    }
+	private boolean isElementPresent(By by) {
+		try {
+			driver.findElement(by);
+			return true;
+		} catch (NoSuchElementException e) {
+			return false;
+		}
+	}
+	
+	@AfterClass
+	public void quitBrowser(){
+		closeBrowser();
+	}
 
-    private void setDriverPath() {
-        if (PlatformUtil.isMac()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver");
-        }
-        if (PlatformUtil.isWindows()) {
-            System.setProperty("webdriver.gecko.driver", "geckodriver.exe");
-        }
-        if (PlatformUtil.isLinux()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
-        }
-    }
+
 }

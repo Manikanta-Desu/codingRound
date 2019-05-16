@@ -19,7 +19,7 @@ public class HotelBookingTest extends BrowserHelperImpl {
 	public void BrowserLaunch(){
 		
 		//calling launch browser method from abstract class 
-		launchBrowser("Firefox", "http://www.cleartrip.com");
+		launchBrowser("firefox", "http://www.cleartrip.com");
 		
 		clearTripHomepage = new ClearTripHomePage(driver);
 	}

@@ -4,13 +4,23 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.sun.javafx.PlatformUtil;
 
-public class SignInTest {
+import utilities.BrowserHelperImpl;
 
-    WebDriver driver = new FirefoxDriver();
+public class SignInTest extends BrowserHelperImpl{
+
+    @BeforeClass
+	public void BrowserLaunch() {
+
+		// calling launch browser method from abstract class
+		launchBrowser("firefox", "http://www.cleartrip.com");
+
+	}
 
     @Test
     public void shouldThrowAnErrorIfSignInDetailsAreMissing() {
@@ -26,8 +36,9 @@ public class SignInTest {
         
         driver.switchTo().frame(1);
        
-        WebDriverWait wait = new WebDriverWait(driver, 100);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("email")));
+        WebDriverWait wait = new WebDriverWait(driver, 75);
+//        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("email")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("email")));
         
         driver.findElement(By.id("email")).sendKeys("desumanikanta70@gmail.com");
         driver.findElement(By.id("password")).sendKeys("Test1234");
@@ -39,26 +50,11 @@ public class SignInTest {
         Assert.assertTrue(errors1.contains("There were errors in your submission"));
         driver.quit();
     }
-
-    private void waitFor(int durationInMilliSeconds) {
-        try {
-            Thread.sleep(durationInMilliSeconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-    }
-
-    private void setDriverPath() {
-        if (PlatformUtil.isMac()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver");
-        }
-        if (PlatformUtil.isWindows()) {
-            System.setProperty("webdriver.gecko.driver", "geckodriver.exe");
-        }
-        if (PlatformUtil.isLinux()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
-        }
-    }
+    
+    @AfterClass
+	public void quitBrowser(){
+		closeBrowser();
+	}
 
 
 }
