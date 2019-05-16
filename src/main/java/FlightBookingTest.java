@@ -32,7 +32,8 @@ public class FlightBookingTest {
         //wait for the auto complete options to appear for the origin
 
         WebDriverWait wait = new WebDriverWait(driver, 50);
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.id("ui-id-1")));
+//        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.id("ui-id-1")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("ui-id-1")));
         
         List<WebElement> originOptions = driver.findElement(By.id("ui-id-1")).findElements(By.tagName("li"));
         originOptions.get(0).click();

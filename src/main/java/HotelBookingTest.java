@@ -1,15 +1,14 @@
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import utilities.BrowserHelper;
+import utilities.BrowserHelperImpl;
 import utilities.ClearTripHomePage;
 import utilities.HotelBookingPage;
 
-public class HotelBookingTest extends BrowserHelper {
+public class HotelBookingTest extends BrowserHelperImpl {
 
-	WebDriver driver;
 	
 	HotelBookingPage hotelBookingPage ;
 	
@@ -18,10 +17,9 @@ public class HotelBookingTest extends BrowserHelper {
 	
 	@BeforeClass
 	public void BrowserLaunch(){
-		setDriverPath();
-		driver = new FirefoxDriver();
-		driver.manage().window().maximize();
-		driver.get("https://www.cleartrip.com/");
+		
+		//calling launch browser method from abstract class 
+		launchBrowser("Firefox", "http://www.cleartrip.com");
 		
 		clearTripHomepage = new ClearTripHomePage(driver);
 	}
@@ -36,11 +34,13 @@ public class HotelBookingTest extends BrowserHelper {
 		
 		hotelBookingPage.setTravellersOnHome("1 room, 2 adults");
 		
-//		new Select(travellerSelection).selectByVisibleText("1 room, 2 adults");
 		hotelBookingPage.setSearchButton();
 
-		driver.quit();
-
+	}
+	
+	@AfterClass
+	public void quitBrowser(){
+		closeBrowser();
 	}
 
 }
