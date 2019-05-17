@@ -1,0 +1,33 @@
+SignIntest ::
+
+Once we click the SignIn button from the clearTrip Home Page , It is will open a new frame , 
+	1.we are not locating the frame in test case
+		
+		Sol : I have located a frame with and switched to that frame and the  i perform my action  
+	
+	2.There was a sync issue while locating the elements
+	
+		Sol: I have added wait method with Expected Condition to visible the particular element
+	
+
+FlightBookingtest : 
+	
+	1.Locating the destination element name is mismatched 
+		
+		driver.findElement(By.id("toTag")).clear(); 		
+        driver.findElement(By.id("toTag")).sendKeys("Delhi"); 
+        
+      Sol : driver.findElement(By.name("destination")).clear();
+		driver.findElement(By.name("destination")).sendKeys("Delhi");
+	
+HoteLBookingtest  :
+
+	1.In PageFactory classes we  have to locate the elements in one class and corresponding testcases should be write in another class
+		
+		Ex : HotelBoolingPage & HoteBookingTest 
+	
+	2.when we use pagefactory concepts we must use the constructor for page classes we and return the pagefactory object elements
+	3. Locating the page factory elements and creating driver instance in the same page, this will not help us to launch the browser
+	4. Locate the elements for  the corresponding pages should have separate pages , here we locating all the elements in once class
+	5. when you click the hotelLink button it will return HotelBooking page , here we are not returning or assigning anything for hotelLink.click() method 
+	
